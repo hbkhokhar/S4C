@@ -5,7 +5,7 @@ import Project2network
 import time
 import sys
 
-
+print('Hello')
 def delay_print(s):
     for c in s:
         sys.stdout.write( '%s' % c )
