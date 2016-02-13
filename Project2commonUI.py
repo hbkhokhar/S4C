@@ -1,11 +1,13 @@
 
-import pygame
+from pygame import *
+mixer.init()
 import connectfour
 import Project2commonUI
 import Project2console2
 import Project2network
 import time
 import sys
+import random
 from colorama import *
 init()
 
@@ -14,7 +16,13 @@ def delay_print(s):
     for c in s:
         sys.stdout.write( '%s' % c )
         sys.stdout.flush()
-        time.sleep(0)
+        time.sleep(0.0225)
+
+def delay_print2(s):
+    for c in s:
+        sys.stdout.write( '%s' % c )
+        sys.stdout.flush()
+        time.sleep(0.008)
 
 def MainTitle() -> str: 
     String1 = '            ****************************     *****            **************               '
@@ -29,7 +37,7 @@ def MainTitle() -> str:
     String10 = '   ******************      *******  *******         *******   *******   ****************   '
     String11 = '  *****   ****   *    *  *    *  *****   *****  *******      ******   ****   *    *  ****  '
     String12 = ' *       *    *  * *  *  * *  *  *      *          *         *       *    *  *    *  *   * '
-    Strign13 = ' *       *    *  *  * *  *  * *  *****  *          *         ******  *    *  *    *  ****  '
+    String13 = ' *       *    *  *  * *  *  * *  *****  *          *         ******  *    *  *    *  ****  '
     String14 = ' *       *    *  *   **  *   **  *      *          *         *       *    *  *    *  *  *  '
     String15 = '  *****   ****   *    *  *    *  *****   *****     *         *        ****    ****   *   * '
     String16 = '   ******        ******          *****           **************        *****************   '
@@ -44,14 +52,28 @@ def MainTitle() -> str:
     String25 = '     *******  *******   *******         *******  *******   **********************          '
 
     
-    MainTitle = Fore.YELLOW + String1 + '\n' + String2 + '\n' + String3 + '\n' + String4 + '\n' + String5 + '\n' + String6 + '\n' + String7 + '\n' + String8 + '\n' + String9 + '\n' + String10
-    delay_print(MainTitle)
+    MainTitle = String1 + '\n' + String2 + '\n' + String3 + '\n' + String4 + '\n' + String5 + '\n' + String6 + '\n' + String7 + '\n' + String8 + '\n' + String9 + '\n' + String10
+    print(Fore.YELLOW)
+    delay_print2(MainTitle)
 
-    MainTitle2 = Fore.WHITE + String11 + '\n' + String12 + '\n' + String13 + '\n' + String14 + '\n' + String15
-    delay_print(MainTitle2)
+    MainTitle2 = String11 + '\n' + String12 + '\n' + String13 + '\n' + String14 + '\n' + String15
+    print(Fore.WHITE)
+    delay_print2(MainTitle2)
 
-    MainTitle3 = Fore.YELLOW + String16 + '\n' + String17 + '\n' + String18 + '\n' + String19 + '\n' + String20 + '\n' + String21 + '\n' + String22 + '\n' + String23 + '\n' + String24 + '\n' + String25
-    delay_print(MainTitle3)
+    MainTitle3 = String16 + '\n' + String17 + '\n' + String18 + '\n' + String19 + '\n' + String20 + '\n' + String21 + '\n' + String22 + '\n' + String23 + '\n' + String24 + '\n' + String25
+    print(Fore.YELLOW)
+    delay_print2(MainTitle3)
+
+
+
+def ShuffleMusic() -> None:
+    L1 = ['Duel_of_the_Fates.ogg', 'Farewell&Trip.ogg', 'Ways_of_the_Force.ogg']
+    random.shuffle(L1)
+    for x in L1:
+        mixer.music.load(x)
+        mixer.music.play()
+        
+
     
 def printBoard (board):
 
@@ -98,46 +120,57 @@ def user_move(response, GameState):
         return user_pop(response, GameState)
 
 def connect_four_integratedUI():    
-    time.sleep(0)
+    time.sleep(4)
     print()
     
-    music.mixer.load('C:\\Users\\Hassan\\UC Irvine\\ICS 32\\Project2\\StarWarsIntro.ogg')
-    music.mixer.play()
+    mixer.music.load('Intro.ogg')
+    mixer.music.play()
 
-    print(Fore.CYAN + '   A long time ago in a galaxy far, far away...')
+    print(Fore.CYAN)        
+    delay_print('    A long time ago in a galaxy far, far away...')
+    time.sleep(8)
     print()
     print()
     print()
     MainTitle()
-    time.sleep(25)
-
+    print()
+    print()
+    print()
+    time.sleep(20)
+    mixer.music.stop()
+    mixer.music.load('MainMenu.ogg')
+    mixer.music.play(-1)
     
     while True:
-
-        music.mixer.stop()
-        music.mixer.load('StarWarsGame.ogg')
-        music.mixer.play()
+        print(Fore.YELLOW)
         print('\nChoose your Game Mode or Enter \'Quit\' to exit the program...')
         print('[ Enter \'Network\' to play against the CPU & \'Versus\' for 2-on-2 battle!!! ]')
-        
+        print(Fore.CYAN + '')
         InputBox = input()
         GameMode = InputBox.upper()
 
         if GameMode == 'NETWORK':
-            music.mixer.stop()
-            music.mixer.load('StarWarsNetwork.ogg')
+            mixer.music.stop()
+            time.sleep(1.5)
+            ShuffleMusic()
+            print(Fore.WHITE)
             Network = Project2network.connect_four_networkUI()
             
         elif GameMode == 'VERSUS':
-            music.mixer.stop()
-            music.mixer.load('StarWarsVersus.ogg')
+            mixer.music.stop()
+            time.sleep(1.5)
+            ShuffleMusic()
+            print(Fore.WHITE)
             Console = Project2console2.connect_four_consoleUI()
 
         elif GameMode == 'QUIT':
+            print(Fore.CYAN + '\nExiting program....')
+            time.sleep(5.5)
             break
         else:
             print('\nWhoops. Enter a valid response again! :p ')
 
 if __name__ == '__main__':
     connect_four_integratedUI()
+
 
