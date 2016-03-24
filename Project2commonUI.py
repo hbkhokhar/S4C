@@ -8,23 +8,30 @@ import Project2network
 import time
 import sys
 import random
+from threading import Thread
 from colorama import *
 init()
 
 
 def delay_print(s):
+    ''' Prints each character in a string at a delayed speed '''
+    
     for c in s:
         sys.stdout.write( '%s' % c )
         sys.stdout.flush()
         time.sleep(0.0225)
 
 def delay_print2(s):
+    ''' Prints each character in a string at a delayed speed '''
+    
     for c in s:
         sys.stdout.write( '%s' % c )
         sys.stdout.flush()
         time.sleep(0.008)
 
-def MainTitle() -> str: 
+def MainTitle() -> str:
+    ''' Prints the main title of the game! '''
+    
     String1 = '            ****************************     *****            **************               '
     String2 = '           *                           *    *     *           *              *             '
     String3 = '           *     ***********     *******   *   *   *          *     *****     *            '
@@ -66,17 +73,33 @@ def MainTitle() -> str:
 
 
 
-def ShuffleMusic() -> None:
-    L1 = ['Duel_of_the_Fates.ogg', 'Farewell&Trip.ogg', 'Ways_of_the_Force.ogg']
+def ShuffleMusic(L1: list) -> bool:
+    ''' Function shuffles music within the given in-game music playlist '''
+    
     random.shuffle(L1)
-    for x in L1:
-        mixer.music.load(x)
-        mixer.music.play()
-        
+    print(L1)
+    
+
+    time.sleep(1.5)
+    mixer.music.load(L1[0][0])
+    mixer.music.play()
+    time.sleep(L1[0][1])
+    time.sleep(1.5)
+
+    mixer.music.load(L1[1][0])
+    mixer.music.play()
+    time.sleep(L1[1][1])
+    time.sleep(1.5)
+    
+    mixer.music.load(L1[2][0])
+    mixer.music.play()
+    time.sleep(L1[2][1])
+    time.sleep(1.5)
 
     
 def printBoard (board):
-
+    ''' Function prints the connect four board '''
+    print(Fore.YELLOW)
     Result = ('  '.join(map(lambda x: str(x + 1), range(connectfour.BOARD_COLUMNS))))
     delay_print(Result)
     print()
@@ -97,6 +120,7 @@ def printBoard (board):
 
 #DROP
 def user_drop(response, GameState):
+    ''' Given the response this 'drops' a piece on the connect four board '''
     column = int(response[1])
     column = column - 1
     return(connectfour.drop(GameState, column))
@@ -106,20 +130,27 @@ def user_drop(response, GameState):
 
 #POP
 def user_pop(response, GameState):
+    ''' Given the response this 'pops' a piece on the connect four board '''
+    
     column = int(response[1])
     column = column - 1
     return(connectfour.pop(GameState, column))
 
     print()
+
 ####MOVE (WITH POP AND DROP)
 def user_move(response, GameState):
+    ''' Make a move on the board accordint to the input '''
     if response[0] == 'DROP':
         return user_drop(response, GameState)
         
     if response[0] == 'POP':
         return user_pop(response, GameState)
 
-def connect_four_integratedUI():    
+def connect_four_integratedUI():
+    ''' Runs the user interface for the game by initiating each part
+    of the program including text, music, etc. '''
+    
     time.sleep(4)
     print()
     
@@ -140,6 +171,8 @@ def connect_four_integratedUI():
     mixer.music.stop()
     mixer.music.load('MainMenu.ogg')
     mixer.music.play(-1)
+
+    L1 = [['Duel_of_the_Fates.ogg', 256], ['Farewell&Trip.ogg', 302], ['Ways_of_the_Force.ogg', 201]]
     
     while True:
         print(Fore.YELLOW)
@@ -151,15 +184,18 @@ def connect_four_integratedUI():
 
         if GameMode == 'NETWORK':
             mixer.music.stop()
+            mixer.music.load('Farewell&Trip.ogg')
+            mixer.music.play(-1)
             time.sleep(1.5)
-            ShuffleMusic()
-            print(Fore.WHITE)
             Network = Project2network.connect_four_networkUI()
+            
+         
             
         elif GameMode == 'VERSUS':
             mixer.music.stop()
+            mixer.music.load('Ways_of_the_Force.ogg')
+            mixer.music.play(-1)
             time.sleep(1.5)
-            ShuffleMusic()
             print(Fore.WHITE)
             Console = Project2console2.connect_four_consoleUI()
 
@@ -172,5 +208,3 @@ def connect_four_integratedUI():
 
 if __name__ == '__main__':
     connect_four_integratedUI()
-
-
